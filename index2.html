@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的小說網站</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'PMingLiU', '新細明體', serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      text-align: left;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      white-space: pre-wrap;
+      font-size: 18px;
+    }
+
+    /* 淡入淡出效果 */
+    .fade-section {
+      opacity: 1;
+      transition: opacity 1.5s ease-in-out, height 1.5s ease-in-out, padding 1.5s ease-in-out;
+      overflow: hidden;
+    }
+
+    .fade-section.hide {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      pointer-events: none;
+    }
+
+    /* 隱藏文章區域淡入淡出效果 */
+    #hiddenArticle {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      margin-top: 0;
+      padding: 0 20px;
+      background-color: #111;
+      border-radius: 10px;
+      transition: opacity 1.5s ease, max-height 1.5s ease, margin-top 1.5s ease, padding 1.5s ease;
+    }
+
+    #hiddenArticle.show {
+      opacity: 1;
+      max-height: 1000px;
+      margin-top: 2rem;
+      padding: 20px;
+    }
+
+    /* 小黃瓜長方形圖示 */
+    #cucumberIcon {
+      display: block;
+      margin: 40px auto 0 auto;
+      width: 80px;
+      height: 30px;
+      background-color: lightgreen;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>我的小說</h1>
+
+    <h2>序章</h2>
+    <p>在這裡貼上你的小說內容。
+這是一段示範文字：
+夜色像水墨鋪開，街燈在濕潤的柏油上拉出長長的光。</p>
+
+    <h2 id="chapter1Title"></h2>
+    <div id="chapter1" class="fade-section">
+      <p>把你的第一章內容貼在這裡。
+可以用空白行分段，或直接貼大段文字。</p>
+    </div>
+
+    <!-- 新文章區域 -->
+    <div id="newContent" class="fade-section hide">
+      <h2></h2>
+      <p>這是替換後的第一章新文章，接下來會連接隱藏文章。</p>
+    </div>
+
+    <!-- 隱藏文章 -->
+    <div id="hiddenArticle">
+      <h2>隱藏章節</h2>
+      <p>這是隱藏文章，點擊小黃瓜圖示後才會顯示的內容。</p>
+    </div>
+
+    <!-- 小黃瓜長方形 -->
+    <div id="cucumberIcon"></div>
+  </div>
+
+  <script>
+    const cucumberIcon = document.getElementById('cucumberIcon');
+    const hiddenArticle = document.getElementById('hiddenArticle');
+    const chapter1 = document.getElementById('chapter1');
+    const newContent = document.getElementById('newContent');
+    const chapter1Title = document.getElementById('chapter1Title');
+    let showingNew = false;
+
+    cucumberIcon.addEventListener('click', () => {
+      if (!showingNew) {
+        // 同時淡出第一章和隱藏章節
+        chapter1.classList.add('hide');
+        hiddenArticle.classList.remove('show');
+
+        // 顯示新文章並滑到標題
+        newContent.classList.remove('hide');
+        chapter1Title.scrollIntoView({ behavior: 'smooth' });
+
+        // 顯示隱藏章節
+        hiddenArticle.classList.add('show');
+
+        showingNew = true;
+      } else {
+        // 同時淡出新文章和隱藏章節
+        newContent.classList.add('hide');
+        hiddenArticle.classList.remove('show');
+
+        // 顯示原第一章並滑到標題
+        chapter1.classList.remove('hide');
+        chapter1Title.scrollIntoView({ behavior: 'smooth' });
+
+        showingNew = false;
+      }
+    });
+  </script>
+</body>
+</html>
