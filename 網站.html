@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>植物照料</title>
+  <title>我的小說網站</title>
   <style>
     body {
       background-color: #000;
@@ -35,11 +35,11 @@
       text-align: left;
       line-height: 1.8;
       margin-bottom: 1rem;
-      white-space: pre-wrap;
+      white-space: pre-wrap; /* 保留換行 */
       font-size: 18px;
     }
 
-    /* 動畫用 class */
+    /* 動畫 */
     .fade-section {
       opacity: 1;
       transition: opacity 1s ease-in-out, height 1s ease-in-out, padding 1s ease-in-out;
@@ -53,7 +53,7 @@
       pointer-events: none;
     }
 
-    /* 隱藏段落 */
+    /* 隱藏段落（用 JS 控制 max-height） */
     .hidden-article {
       opacity: 0;
       max-height: 0;
@@ -66,7 +66,6 @@
     }
     .hidden-article.show {
       opacity: 1;
-      max-height: 1000px;
       margin-top: 2rem;
       padding: 20px;
     }
@@ -111,11 +110,12 @@
 </head>
 <body>
   <div class="container">
-    <h1>植物照料</h1>
+    <h1>我的小說</h1>
 
     <!-- 第一段：固定 -->
     <h2></h2>
-    <p>最近的研究顯示，植物與人類一樣，都是具有知覺的生物。
+    <p>
+最近的研究顯示，植物與人類一樣，都是具有知覺的生物。
 
 它們會痛、會記憶、會逃跑，甚至還會與周遭的植物溝通。
 
@@ -504,12 +504,14 @@
 
 胸口在顫抖，她知道這是哭出來的前兆。
 
-「嗚…」</p>
+「嗚…」
+    </p>
 
     <!-- 第二段：舊版 & 新版 -->
-    <h2 id="chapter2Title">---</h2>
+    <h2 id="chapter2Title"></h2>
     <div id="chapter2-old" class="fade-section">
-      <p>然後，背後突然竄起一陣涼意。
+      <p>
+然後，背後突然竄起一陣涼意。
 
 金色的瀏海飄了起來，在我眼前晃著，彷彿失去重力一般。
 
@@ -599,10 +601,11 @@
 夜闌人靜，金髮少女帶著幸福與滿足感入睡。
 
 明早，還有工作要做呢。
-</p>
+      </p>
     </div>
     <div id="chapter2-new" class="fade-section hide">
-      <p>初音低頭看了看錶，一兩滴淚滴在了錶面上。
+      <p id="chapter2NewFirst">
+初音低頭看了看錶，一兩滴淚滴在了錶面上。
 
 這座山丘上，有個落寞的背影。
 
@@ -640,13 +643,14 @@
 「不能再撒嬌了…妳是成年人了。」
 
 我俯身抬起裝著枯萎花束的水桶，拖著沉重的步伐下樓。
-</p>
+      </p>
     </div>
 
     <!-- 第三段（隱藏，門開啟後顯示） -->
     <div id="hiddenArticle1" class="hidden-article">
       <h2></h2>
-      <p>出了門，我沿著石板路繞到了別墅後面。
+      <p>
+出了門，我沿著石板路繞到了別墅後面。
 
 別墅後方有一棟獨立於主棟的小木屋，門口上的金屬牌上刻著「工具間」三個字。
 
@@ -803,13 +807,15 @@
 
 就像照顧植物一樣，這只是時間問題。
 
-我只是需要耐心而已。</p>
+我只是需要耐心而已。
+      </p>
     </div>
 
     <!-- 第四段（隱藏，小黃瓜按下後顯示） -->
     <div id="hiddenArticle2" class="hidden-article">
       <h2></h2>
-      <p>我沿著原路返回，踏著石板路，早上待著的拱門映著冷冷的路燈，一絲不安的氣氛在蔓延。
+      <p>
+我沿著原路返回，踏著石板路，早上待著的拱門映著冷冷的路燈，一絲不安的氣氛在蔓延。
 
 我朝別墅所在的丘上望去，看見別墅一樓與二樓的燈亮著。
 
@@ -960,7 +966,8 @@
 
 
 
-「小祥…」</p>
+「小祥…」
+      </p>
     </div>
 
     <!-- 門板 -->
@@ -981,11 +988,19 @@
     const hiddenArticle1 = document.getElementById('hiddenArticle1');
     const hiddenArticle2 = document.getElementById('hiddenArticle2');
     const doorSound = document.getElementById('doorSound');
+    const chapter2NewFirst = document.getElementById('chapter2NewFirst');
 
-      setTimeout(() => {
-        chapter2NewFirst.scrollIntoView({ behavior: "smooth" });
-      }, 500);
-    });
+    // 幫助函數：展開隱藏段落
+    function showArticle(article) {
+      article.classList.add('show');
+      article.style.maxHeight = article.scrollHeight + "px";
+    }
+
+    // 幫助函數：收起隱藏段落
+    function hideArticle(article) {
+      article.classList.remove('show');
+      article.style.maxHeight = "0px";
+    }
 
     // 點門：切換第二段新舊 & 顯示第三段 & 門消失 & 出現小黃瓜
     doorButton.addEventListener('click', () => {
@@ -993,19 +1008,21 @@
       doorSound.play(); // 播放開門音效
       chapter2Old.classList.add('hide');
       chapter2New.classList.remove('hide');
-      hiddenArticle1.classList.add('show');
+      showArticle(hiddenArticle1);
       cucumberButton.classList.add('show');
       doorButton.style.display = 'none';
+
+      // 自動滑到新版本第一句
+      setTimeout(() => {
+        chapter2NewFirst.scrollIntoView({ behavior: "smooth" });
+      }, 500);
     });
 
     // 點小黃瓜：顯示第四段 & 小黃瓜消失
     cucumberButton.addEventListener('click', () => {
-      hiddenArticle2.classList.add('show');
+      showArticle(hiddenArticle2);
       cucumberButton.classList.remove('show');
     });
   </script>
 </body>
 </html>
-
-
-
