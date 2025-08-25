@@ -982,6 +982,11 @@
     const hiddenArticle2 = document.getElementById('hiddenArticle2');
     const doorSound = document.getElementById('doorSound');
 
+      setTimeout(() => {
+        chapter2NewFirst.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    });
+
     // 點門：切換第二段新舊 & 顯示第三段 & 門消失 & 出現小黃瓜
     doorButton.addEventListener('click', () => {
       doorSound.currentTime = 0;
@@ -1001,5 +1006,6 @@
   </script>
 </body>
 </html>
+
 
 
