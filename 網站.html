@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的小說網站</title>
+  <title>植物照料</title>
   <style>
     body {
       background-color: #000;
@@ -39,7 +39,7 @@
       font-size: 18px;
     }
 
-    /* 動畫 */
+    /* 第二段切換動畫 */
     .fade-section {
       opacity: 1;
       transition: opacity 1s ease-in-out, height 1s ease-in-out, padding 1s ease-in-out;
@@ -53,21 +53,11 @@
       pointer-events: none;
     }
 
-    /* 隱藏段落（用 JS 控制 max-height） */
+    /* 隱藏段落（高度由 JS 控制） */
     .hidden-article {
       opacity: 0;
-      max-height: 0;
+      height: 0;
       overflow: hidden;
-      margin-top: 0;
-      padding: 0 20px;
-      background-color: #111;
-      border-radius: 10px;
-      transition: opacity 1s ease, max-height 1s ease, margin-top 1s ease, padding 1s ease;
-    }
-    .hidden-article.show {
-      opacity: 1;
-      margin-top: 2rem;
-      padding: 20px;
     }
 
     /* 門板按鈕 */
@@ -110,7 +100,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>我的小說</h1>
+    <h1>植物照料</h1>
 
     <!-- 第一段：固定 -->
     <h2></h2>
@@ -990,16 +980,41 @@
     const doorSound = document.getElementById('doorSound');
     const chapter2NewFirst = document.getElementById('chapter2NewFirst');
 
-    // 幫助函數：展開隱藏段落
+    // 幫助函數：展開隱藏段落（JS 動態高度）
     function showArticle(article) {
-      article.classList.add('show');
-      article.style.maxHeight = article.scrollHeight + "px";
+      article.style.display = "block";
+      let fullHeight = article.scrollHeight + "px";
+      article.style.height = "0px";
+      article.style.opacity = "0";
+
+      requestAnimationFrame(() => {
+        article.style.transition = "height 1s ease, opacity 1s ease";
+        article.style.height = fullHeight;
+        article.style.opacity = "1";
+      });
+
+      article.addEventListener("transitionend", function handler() {
+        article.style.height = "auto"; // 讓內容自適應
+        article.removeEventListener("transitionend", handler);
+      });
     }
 
     // 幫助函數：收起隱藏段落
     function hideArticle(article) {
-      article.classList.remove('show');
-      article.style.maxHeight = "0px";
+      let fullHeight = article.scrollHeight + "px";
+      article.style.height = fullHeight;
+      article.style.opacity = "1";
+
+      requestAnimationFrame(() => {
+        article.style.transition = "height 1s ease, opacity 1s ease";
+        article.style.height = "0px";
+        article.style.opacity = "0";
+      });
+
+      article.addEventListener("transitionend", function handler() {
+        article.style.display = "none";
+        article.removeEventListener("transitionend", handler);
+      });
     }
 
     // 點門：切換第二段新舊 & 顯示第三段 & 門消失 & 出現小黃瓜
