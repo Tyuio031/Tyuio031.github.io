@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>植物照料</title>
+  <title>我的小說網站</title>
   <style>
     body {
       background-color: #000;
@@ -39,10 +39,10 @@
       font-size: 18px;
     }
 
-    /* 淡入淡出效果 */
+    /* 動畫用 class */
     .fade-section {
       opacity: 1;
-      transition: opacity 1.2s ease-in-out, height 1.2s ease-in-out, padding 1.2s ease-in-out;
+      transition: opacity 1s ease-in-out, height 1s ease-in-out, padding 1s ease-in-out;
       overflow: hidden;
     }
     .fade-section.hide {
@@ -53,7 +53,7 @@
       pointer-events: none;
     }
 
-    /* 隱藏文章區域 */
+    /* 隱藏段落 */
     .hidden-article {
       opacity: 0;
       max-height: 0;
@@ -62,7 +62,7 @@
       padding: 0 20px;
       background-color: #111;
       border-radius: 10px;
-      transition: opacity 1.2s ease, max-height 1.2s ease, margin-top 1.2s ease, padding 1.2s ease;
+      transition: opacity 1s ease, max-height 1s ease, margin-top 1s ease, padding 1s ease;
     }
     .hidden-article.show {
       opacity: 1;
@@ -96,7 +96,7 @@
 
     /* 小黃瓜按鈕 */
     #cucumberButton {
-      display: none; /* 初始隱藏 */
+      display: none;
       margin: 40px auto 0 auto;
       width: 80px;
       height: 30px;
@@ -111,35 +111,37 @@
 </head>
 <body>
   <div class="container">
-    <h1>植物照料</h1>
+    <h1>我的小說</h1>
 
-    <h2 id="chapter1Title"></h2>
-    <div id="chapter1" class="fade-section">
-      <p>rR</p>
+    <!-- 第一段：固定 -->
+    <h2>第一段</h2>
+    <p>這裡是固定不變的第一段內容。</p>
+
+    <!-- 第二段：舊版 & 新版 -->
+    <h2 id="chapter2Title">第二段</h2>
+    <div id="chapter2-old" class="fade-section">
+      <p>這裡是第二段的舊版本。</p>
+    </div>
+    <div id="chapter2-new" class="fade-section hide">
+      <p>這裡是第二段的新版本。</p>
     </div>
 
-    <!-- 新文章 -->
-    <div id="newContent" class="fade-section hide">
-      <h2>RR</h2>
-      <p>這是替換後的第一章新文章。</p>
-    </div>
-
-    <!-- 隱藏文章 1 -->
+    <!-- 第三段（隱藏，門開啟後顯示） -->
     <div id="hiddenArticle1" class="hidden-article">
-      <h2>隱藏章節一</h2>
-      <p>這是隱藏文章一，點擊門板才會顯示。</p>
+      <h2>第三段（隱藏）</h2>
+      <p>這是隱藏的第三段，門打開後才會出現。</p>
     </div>
 
-    <!-- 隱藏文章 2 -->
+    <!-- 第四段（隱藏，小黃瓜按下後顯示） -->
     <div id="hiddenArticle2" class="hidden-article">
-      <h2>隱藏章節二</h2>
-      <p>這是隱藏文章二，點擊小黃瓜才會顯示。</p>
+      <h2>第四段（隱藏）</h2>
+      <p>這是隱藏的第四段，小黃瓜按下後才會出現。</p>
     </div>
 
-    <!-- 門板按鈕 -->
+    <!-- 門板 -->
     <div id="doorButton"></div>
 
-    <!-- 小黃瓜按鈕 -->
+    <!-- 小黃瓜 -->
     <div id="cucumberButton"></div>
   </div>
 
@@ -149,50 +151,28 @@
   <script>
     const doorButton = document.getElementById('doorButton');
     const cucumberButton = document.getElementById('cucumberButton');
-    const chapter1 = document.getElementById('chapter1');
-    const newContent = document.getElementById('newContent');
+    const chapter2Old = document.getElementById('chapter2-old');
+    const chapter2New = document.getElementById('chapter2-new');
     const hiddenArticle1 = document.getElementById('hiddenArticle1');
     const hiddenArticle2 = document.getElementById('hiddenArticle2');
-    const chapter1Title = document.getElementById('chapter1Title');
     const doorSound = document.getElementById('doorSound');
 
-    let showingNew = false;
-    let showingSecond = false;
-
-    // 門板：開啟新版本 + 隱藏文章1
+    // 點門：切換第二段新舊 & 顯示第三段 & 門消失 & 出現小黃瓜
     doorButton.addEventListener('click', () => {
-      if (!showingNew) {
-        doorSound.currentTime = 0;
-        doorSound.play(); // 播放門音效
-        chapter1.classList.add('hide');
-        newContent.classList.remove('hide');
-        hiddenArticle1.classList.add('show');
-        cucumberButton.classList.add('show'); // 出現小黃瓜
-        doorButton.style.display = 'none'; // 門板消失
-        chapter1Title.scrollIntoView({ behavior: 'smooth' });
-        showingNew = true;
-      }
+      doorSound.currentTime = 0;
+      doorSound.play(); // 播放開門音效
+      chapter2Old.classList.add('hide');
+      chapter2New.classList.remove('hide');
+      hiddenArticle1.classList.add('show');
+      cucumberButton.classList.add('show');
+      doorButton.style.display = 'none';
     });
 
-    // 小黃瓜：切換隱藏文章2 或 收回全部
+    // 點小黃瓜：顯示第四段 & 小黃瓜消失
     cucumberButton.addEventListener('click', () => {
-      if (!showingSecond) {
-        hiddenArticle2.classList.add('show');
-        showingSecond = true;
-      } else {
-        // 收回所有 → 回到初始狀態
-        hiddenArticle2.classList.remove('show');
-        hiddenArticle1.classList.remove('show');
-        newContent.classList.add('hide');
-        chapter1.classList.remove('hide');
-        cucumberButton.classList.remove('show'); // 小黃瓜消失
-        doorButton.style.display = 'block'; // 門板回來
-        showingNew = false;
-        showingSecond = false;
-        chapter1Title.scrollIntoView({ behavior: 'smooth' });
-      }
+      hiddenArticle2.classList.add('show');
+      cucumberButton.classList.remove('show');
     });
   </script>
 </body>
 </html>
-
